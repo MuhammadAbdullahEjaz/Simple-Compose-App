@@ -1,5 +1,6 @@
 package com.example.gamestore.ui.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,44 +27,47 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gamestore.components.InputTextField
-import com.example.gamestore.ui.theme.GameStoreTheme
 
 
 @Composable
-fun HomeScreenTopBar() {
+fun HomeScreenTopBar(viewModel: HomeViewModel) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
     ) {
-        var search by remember { mutableStateOf("") }
-        var searchVisibility by remember { mutableStateOf(false) }
 
-        Title(visibility = searchVisibility, modifier = Modifier.align(Alignment.Center))
+        val uiState by viewModel.games.collectAsState()
+        var visibility by remember {
+            mutableStateOf(uiState.searchVisiblity)
+        }
+        val viewModelUpdatedState by rememberUpdatedState(newValue = viewModel)
+        Title(visibility = visibility, modifier = Modifier.align(Alignment.Center))
 
         SearchInput(
-            visibility = searchVisibility,
+            visibility = visibility,
             modifier = Modifier.align(Alignment.Center),
-            input = search,
-            onValueChange = { it -> search = it })
+            input = uiState.search,
+            onValueChange = { viewModel.onSearchChange(it) })
 
         SearchIcon(
-            visibility = searchVisibility,
+            visibility = visibility,
             modifier = Modifier.align(Alignment.CenterEnd)
         ) {
-            searchVisibility = !searchVisibility
+            uiState.searchVisiblity = !uiState.searchVisiblity
+            visibility = !visibility
         }
 
         CrossIcon(
-            visibility = searchVisibility,
+            visibility = visibility,
             modifier = Modifier.align(Alignment.CenterEnd)
         ) {
-            search = ""
-            searchVisibility = !searchVisibility
+            viewModel.resetSearch()
+            uiState.searchVisiblity = !uiState.searchVisiblity
+            visibility = !visibility
         }
 
     }
@@ -176,13 +181,5 @@ fun SearchBox(modifier: Modifier = Modifier, onClick: () -> Unit) {
 fun CancelButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
     IconButton(onClick = { onClick() }, modifier = modifier) {
         Icon(imageVector = Icons.Default.Close, contentDescription = null)
-    }
-}
-
-@Preview
-@Composable
-fun PreviewSearchBox() {
-    GameStoreTheme {
-        HomeScreenTopBar()
     }
 }

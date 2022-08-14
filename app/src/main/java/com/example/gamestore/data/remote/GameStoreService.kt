@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 
 interface GameStoreService {
@@ -12,9 +13,6 @@ interface GameStoreService {
     @GET("games")
     suspend fun getGames(
         @HeaderMap header: Map<String, String>,
-        @Query("key") key: String,
-        @Query("page") page: Int,
-        @Query("page_size") page_size: Int
+        @QueryMap query: Map<String, String>
     ): Response<Games>
-
 }

@@ -90,12 +90,14 @@ fun GameCard(
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp)
                 )
             }
-            PlatformsRow(
-                platform = game.platforms,
-                modifier = Modifier
-                    .padding(bottom = 6.dp)
-                    .padding(horizontal = 8.dp)
-            )
+            game.platforms?.let {
+                PlatformsRow(
+                    platform = it,
+                    modifier = Modifier
+                        .padding(bottom = 6.dp)
+                        .padding(horizontal = 8.dp)
+                )
+            }
         }
     }
 }

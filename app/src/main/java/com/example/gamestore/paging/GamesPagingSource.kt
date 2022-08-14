@@ -7,7 +7,7 @@ import com.example.gamestore.data.remote.GameStoreService
 import retrofit2.HttpException
 import java.io.IOException
 
-class GamesPagingSource(private val gameStoreService: GameStoreService, search:String?): PagingSource<Int, Results>() {
+class GamesPagingSource(private val gameStoreService: GameStoreService, private val search:String?): PagingSource<Int, Results>() {
     override fun getRefreshKey(state: PagingState<Int, Results>): Int? {
         return state.anchorPosition?.let {
             state.closestPageToPosition(it)?.prevKey?.plus(1) ?:
@@ -23,7 +23,17 @@ class GamesPagingSource(private val gameStoreService: GameStoreService, search:S
             headers["X-RapidAPI-Key"] = "b41419b242mshb52d15f8efb676fp16d829jsn1fa2e1d2add4"
             headers["X-RapidAPI-Host"] = "rawg-video-games-database.p.rapidapi.com"
             headers["User-Agent"] = "GameStore"
-            val response = gameStoreService.getGames(headers, "47f3f29c65304feb85e5a11e75d617ec",page, params.loadSize)
+
+            val query = mutableMapOf<String, String>()
+            query["key"] = "47f3f29c65304feb85e5a11e75d617ec"
+            query["page"] = "$page"
+            query["page_size"] = "${params.loadSize}"
+
+            search?.let {
+                query["search"] = it
+            }
+
+            val response = gameStoreService.getGames(headers, query)
             if(response.isSuccessful){
                  LoadResult.Page(
                     data = response.body()!!.results!!,

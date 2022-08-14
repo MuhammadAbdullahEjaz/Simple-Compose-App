@@ -7,6 +7,7 @@ import com.example.gamestore.paging.GamesPagingSource
 import kotlinx.coroutines.flow.Flow
 
 data class HomeScreenState(
-    val PagingDataSource: Flow<PagingData<Results>>?,
-    var search:String = ""
+    val PagingDataSource: Flow<PagingData<Results>>? = null,
+    var search:String = "",
+    var searchVisiblity:Boolean = false
 )

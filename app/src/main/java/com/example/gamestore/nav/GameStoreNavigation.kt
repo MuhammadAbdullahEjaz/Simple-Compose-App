@@ -46,7 +46,7 @@ fun GameStoreNavigation(
                     navController.getBackStackEntry(Destinations.Home)
                 }
                 val homeViewModel = hiltViewModel<HomeViewModel>(parentEntry)
-                GameStoreScaffold(topBar = { HomeScreenTopBar()}) {
+                GameStoreScaffold(topBar = { HomeScreenTopBar(homeViewModel)}) {
                     HomeScreen(homeViewModel, navigationActions.navigateToHomeDetailScreen)
                 }
             }

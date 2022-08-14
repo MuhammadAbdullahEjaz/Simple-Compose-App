@@ -28,10 +28,10 @@ data class Results(
     @Json(name = "reviews_count") var reviewsCount: Int? = null,
     @Json(name = "saturated_color") var saturatedColor: String? = null,
     @Json(name = "dominant_color") var dominantColor: String? = null,
-    @Json(name = "platforms") var platforms: List<Platforms> = listOf(),
+    @Json(name = "platforms") var platforms: List<Platforms>? = listOf(),
     @Json(name = "genres") var genres: List<Genres> = listOf(),
     @Json(name = "clip") var clip: String? = null,
-    @Json(name = "tags") var tags: List<Tags> = listOf(),
+    @Json(name = "tags") var tags: List<Tags>? = listOf(),
     @Json(name = "esrb_rating") var esrbRating: EsrbRating? = EsrbRating(),
     @Json(name = "short_screenshots") var shortScreenshots: List<ScreenShots> = listOf()
 
