@@ -10,8 +10,8 @@ import java.io.IOException
 class GamesPagingSource(private val gameStoreService: GameStoreService, private val search:String?): PagingSource<Int, Results>() {
     override fun getRefreshKey(state: PagingState<Int, Results>): Int? {
         return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(1) ?:
-            state.closestPageToPosition(it)?.nextKey?.minus(1)
+            state.closestPageToPosition(it)?.prevKey ?:
+            state.closestPageToPosition(it)?.nextKey
         }
     }
 

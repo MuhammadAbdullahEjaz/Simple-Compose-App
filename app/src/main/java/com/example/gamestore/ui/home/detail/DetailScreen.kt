@@ -1,7 +1,6 @@
 package com.example.gamestore.ui.home.detail
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
@@ -12,67 +11,43 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.gamestore.components.ShimmerEffect
 import com.example.gamestore.data.model.Results
 import com.example.gamestore.data.model.ScreenShots
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DetailScreen(game: Results) {
     Column() {
-        game.backgroundImage?.let {
-            BannerImage(imageURL = it)
-        }
-        game.shortScreenshots.let {
-            ScreenShotsRow(screenShots = it, modifier = Modifier.padding(vertical = 6.dp))
+
+        val pagerState = rememberPagerState()
+
+        HorizontalPager(
+            state = pagerState,
+            count = game.shortScreenshots.size,
+            modifier = Modifier.fillMaxWidth()
+        ) { page ->
+            CarouselImage(screenShot = game.shortScreenshots[page], modifier = Modifier.padding(horizontal = 12.dp))
         }
     }
 }
 
 @Composable
-fun BannerImage(imageURL: String, modifier: Modifier = Modifier) {
+fun CarouselImage(screenShot: ScreenShots, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(300.dp),
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        shape = RoundedCornerShape(12.dp)
     ) {
         SubcomposeAsyncImage(
             modifier = Modifier,
-            model = imageURL,
+            model = screenShot.image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             loading = {
                 ShimmerEffect(height = 300.dp)
             },
-        )
-    }
-}
-
-@Composable
-fun ScreenShotsRow(
-    screenShots: List<ScreenShots>,
-    modifier: Modifier = Modifier
-) {
-    LazyRow(
-        modifier = modifier.padding(horizontal = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
-    ) {
-        items(screenShots.size) {
-            ScreenShot(screenShot = screenShots[it])
-        }
-    }
-}
-
-@Composable
-fun ScreenShot(screenShot: ScreenShots, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        SubcomposeAsyncImage(
-            modifier = Modifier
-                .width(100.dp)
-                .height(100.dp),
-            model = screenShot.image,
-            contentDescription = null,
-            loading = {
-                ShimmerEffect(height = 100.dp)
-            },
-            contentScale = ContentScale.Crop
         )
     }
 }
