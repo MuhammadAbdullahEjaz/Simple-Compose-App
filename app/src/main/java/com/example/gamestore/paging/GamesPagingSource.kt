@@ -20,12 +20,14 @@ class GamesPagingSource(private val gameStoreService: GameStoreService, private 
 
         return try {
             val headers = mutableMapOf<String, String>()
-            headers["X-RapidAPI-Key"] = "b41419b242mshb52d15f8efb676fp16d829jsn1fa2e1d2add4"
+            //TODO: Provide your api key
+            headers["X-RapidAPI-Key"] = "PROVIDE YOUR API KEY"
             headers["X-RapidAPI-Host"] = "rawg-video-games-database.p.rapidapi.com"
             headers["User-Agent"] = "GameStore"
 
             val query = mutableMapOf<String, String>()
-            query["key"] = "47f3f29c65304feb85e5a11e75d617ec"
+             //TODO: Provide your api key
+            query["key"] = "PROVIDE YOUR API KEY"
             query["page"] = "$page"
             query["page_size"] = "${params.loadSize}"
 
